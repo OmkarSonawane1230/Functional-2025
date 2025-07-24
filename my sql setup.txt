@@ -1,0 +1,20 @@
+# Update the package index
+sudo apt update
+
+# Install the MySQL server
+sudo apt install mysql-server
+
+# Secure the MySQL installation (interactive script)
+sudo mysql_secure_installation
+
+# To check if the MySQL service is running
+sudo systemctl status mysql.service
+
+# To start the MySQL service (if not running)
+sudo systemctl start mysql.service
+
+# To log in to the MySQL server as the root user
+sudo mysql
+
+# To exit the MySQL shell
+exit
