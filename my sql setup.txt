@@ -8,10 +8,10 @@ sudo apt install mysql-server
 sudo mysql_secure_installation
 
 # To check if the MySQL service is running
-sudo systemctl status mysql.service
+sudo service mysql status
 
 # To start the MySQL service (if not running)
-sudo systemctl start mysql.service
+sudo service mysql start
 
 # To log in to the MySQL server as the root user
 sudo mysql
