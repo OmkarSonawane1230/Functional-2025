@@ -1,0 +1,155 @@
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 11
+Server version: 8.0.42-0ubuntu0.24.04.2 (Ubuntu)
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> CREATE DATABASE CollegeDB;
+Query OK, 1 row affected (0.08 sec)
+
+mysql> USE CollegeDB;
+Database changed
+mysql> CREATE TABLE Student (
+    -> StudentID INT NOT NULL,
+    -> FirstName VARCHAR(100),
+    -> LastName VARCHAR(100),
+    -> DOB DATE,
+    -> Email VARCHAR(100),
+    -> Department VARCHAR(100)
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> DESC Student;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| StudentID  | int          | NO   |     | NULL    |       |
+| FirstName  | varchar(100) | YES  |     | NULL    |       |
+| LastName   | varchar(100) | YES  |     | NULL    |       |
+| DOB        | date         | YES  |     | NULL    |       |
+| Email      | varchar(100) | YES  |     | NULL    |       |
+| Department | varchar(100) | YES  |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> ALTER TABLE Student ADD PhoneNumber VARCHAR(15);
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESC Student;
++-------------+--------------+------+-----+---------+-------+
+| Field       | Type         | Null | Key | Default | Extra |
++-------------+--------------+------+-----+---------+-------+
+| StudentID   | int          | NO   |     | NULL    |       |
+| FirstName   | varchar(100) | YES  |     | NULL    |       |
+| LastName    | varchar(100) | YES  |     | NULL    |       |
+| DOB         | date         | YES  |     | NULL    |       |
+| Email       | varchar(100) | YES  |     | NULL    |       |
+| Department  | varchar(100) | YES  |     | NULL    |       |
+| PhoneNumber | varchar(15)  | YES  |     | NULL    |       |
++-------------+--------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> CREATE TABLE Enrollment (
+    -> EnrollmentID INT NOT NULL,
+    -> StudentID INT,
+    -> CourseID INT,
+    -> EnrollmentDate DATE
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> DESC Enrollment;
++----------------+------+------+-----+---------+-------+
+| Field          | Type | Null | Key | Default | Extra |
++----------------+------+------+-----+---------+-------+
+| EnrollmentID   | int  | NO   |     | NULL    |       |
+| StudentID      | int  | YES  |     | NULL    |       |
+| CourseID       | int  | YES  |     | NULL    |       |
+| EnrollmentDate | date | YES  |     | NULL    |       |
++----------------+------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> SHOW TABLES;
++---------------------+
+| Tables_in_CollegeDB |
++---------------------+
+| Enrollment          |
+| Student             |
++---------------------+
+2 rows in set (0.00 sec)
+
+mysql> DROP TABLE Enrollment;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> SHOW TABLES;
++---------------------+
+| Tables_in_CollegeDB |
++---------------------+
+| Student             |
++---------------------+
+1 row in set (0.00 sec)
+
+mysql> TRUNCATE TABLE Student;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> DESC Student;
++-------------+--------------+------+-----+---------+-------+
+| Field       | Type         | Null | Key | Default | Extra |
++-------------+--------------+------+-----+---------+-------+
+| StudentID   | int          | NO   |     | NULL    |       |
+| FirstName   | varchar(100) | YES  |     | NULL    |       |
+| LastName    | varchar(100) | YES  |     | NULL    |       |
+| DOB         | date         | YES  |     | NULL    |       |
+| Email       | varchar(100) | YES  |     | NULL    |       |
+| Department  | varchar(100) | YES  |     | NULL    |       |
+| PhoneNumber | varchar(15)  | YES  |     | NULL    |       |
++-------------+--------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> RENAME TABLE Student TO Students;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> CREATE VIEW StudentDetails AS
+    -> SELECT StudentID, FirstName, LastName
+    -> FROM Students;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> SELECT * FROM StudentDetails;
+Empty set (0.00 sec)
+
+mysql> DESC StudentDetails;
++-----------+--------------+------+-----+---------+-------+
+| Field     | Type         | Null | Key | Default | Extra |
++-----------+--------------+------+-----+---------+-------+
+| StudentID | int          | NO   |     | NULL    |       |
+| FirstName | varchar(100) | YES  |     | NULL    |       |
+| LastName  | varchar(100) | YES  |     | NULL    |       |
++-----------+--------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> CREATE INDEX idx_email ON Students(Email);
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> CREATE TABLE SequenceExample (
+    -> ID INT AUTO_INCREMENT PRIMARY KEY,
+    -> Name VARCHAR(200)
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> DESC SequenceExample;
++-------+--------------+------+-----+---------+----------------+
+| Field | Type         | Null | Key | Default | Extra          |
++-------+--------------+------+-----+---------+----------------+
+| ID    | int          | NO   | PRI | NULL    | auto_increment |
+| Name  | varchar(200) | YES  |     | NULL    |                |
++-------+--------------+------+-----+---------+----------------+
+2 rows in set (0.00 sec)
+
+mysql> 

@@ -1,0 +1,249 @@
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 12
+Server version: 8.0.42-0ubuntu0.24.04.2 (Ubuntu)
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> USE CollegeDB;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> ALTER TABLE Students
+    -> DROP COLUMN Email;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE Students 
+    -> DROP COLUMN PhoneNumber;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESC Students;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| StudentID  | int          | NO   |     | NULL    |       |
+| FirstName  | varchar(100) | YES  |     | NULL    |       |
+| LastName   | varchar(100) | YES  |     | NULL    |       |
+| DOB        | date         | YES  |     | NULL    |       |
+| Department | varchar(100) | YES  |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> INSERT INTO Students (StudentID, FirstName, LastName, DOB, Department)
+    -> VALUES 
+    -> ('Omkar', 'Sonawane', '2005-12-30', 'Computer'),
+    -> ('Prakash', 'Kumar', '2002-08-22', 'Mechanical'),
+    -> ('Mohan', 'Shitole', '2004-02-01', 'Computer');
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> ('Ravi', 'Kharade', '2003-01-14', 'Civil'),
+    -> ('Raviraj', 'Kharade', '2005-11-01', 'Mechanical'),
+    -> ('Karan', 'Mane', '2004-05-21', 'Computer'),
+    -> ('Raj', 'Sonawane', '2004-10-01', 'Electrical'),
+    -> ('Prasad', 'Kakade', '2005-12-11', 'Auto Mobile'),
+    -> ('Vishal', 'Sharma', '2005-09-11', 'Electrical');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''Ravi', 'Kharade', '2003-01-14', 'Civil'),
+('Raviraj', 'Kharade', '2005-11-01', ' at line 1
+mysql> INSERT INTO Students (StudentID, FirstName, LastName, DOB, Department)
+    -> VALUES 
+    -> (1, 'Omkar', 'Sonawane', '2005-12-30', 'Computer'),
+    -> (23, 'Prakash', 'Kumar', '2002-08-22', 'Mechanical'),
+    -> (3, 'Mohan', 'Shitole', '2004-02-01', 'Computer'),
+    -> (42, 'Ravi', 'Kharade', '2003-01-14', 'Civil'),
+    -> (3, 'Raviraj', 'Kharade', '2005-11-01', 'Mechanical'),
+    -> (16, 'Karan', 'Mane', '2004-05-21', 'Computer'),
+    -> (7, 'Raj', 'Sonawane', '2004-10-01', 'Electrical'),
+    -> (22, 'Prasad', 'Kakade', '2005-12-11', 'Auto Mobile'),
+    -> (34, 'Vishal', 'Sharma', '2005-09-11', 'Electrical');
+Query OK, 9 rows affected (0.00 sec)
+Records: 9  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM Students;
++-----------+-----------+----------+------------+-------------+
+| StudentID | FirstName | LastName | DOB        | Department  |
++-----------+-----------+----------+------------+-------------+
+|         1 | Omkar     | Sonawane | 2005-12-30 | Computer    |
+|        23 | Prakash   | Kumar    | 2002-08-22 | Mechanical  |
+|         3 | Mohan     | Shitole  | 2004-02-01 | Computer    |
+|        42 | Ravi      | Kharade  | 2003-01-14 | Civil       |
+|         3 | Raviraj   | Kharade  | 2005-11-01 | Mechanical  |
+|        16 | Karan     | Mane     | 2004-05-21 | Computer    |
+|         7 | Raj       | Sonawane | 2004-10-01 | Electrical  |
+|        22 | Prasad    | Kakade   | 2005-12-11 | Auto Mobile |
+|        34 | Vishal    | Sharma   | 2005-09-11 | Electrical  |
++-----------+-----------+----------+------------+-------------+
+9 rows in set (0.00 sec)
+
+mysql> SELECT 
+    ->     StudentID,
+    ->     FirstName,
+    ->     LastName,
+    ->     YEAR(CURDATE()) - YEAR(DOB) AS Age
+    -> FROM Students;
++-----------+-----------+----------+------+
+| StudentID | FirstName | LastName | Age  |
++-----------+-----------+----------+------+
+|         1 | Omkar     | Sonawane |   20 |
+|        23 | Prakash   | Kumar    |   23 |
+|         3 | Mohan     | Shitole  |   21 |
+|        42 | Ravi      | Kharade  |   22 |
+|         3 | Raviraj   | Kharade  |   20 |
+|        16 | Karan     | Mane     |   21 |
+|         7 | Raj       | Sonawane |   21 |
+|        22 | Prasad    | Kakade   |   20 |
+|        34 | Vishal    | Sharma   |   20 |
++-----------+-----------+----------+------+
+9 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Students
+    -> WHERE Department = 'Computer' AND StudentID <= 10;
++-----------+-----------+----------+------------+------------+
+| StudentID | FirstName | LastName | DOB        | Department |
++-----------+-----------+----------+------------+------------+
+|         1 | Omkar     | Sonawane | 2005-12-30 | Computer   |
+|         3 | Mohan     | Shitole  | 2004-02-01 | Computer   |
++-----------+-----------+----------+------------+------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT StudentID, FirstName, (StudentID + 100) AS UniqueID
+    -> FROM Students;
++-----------+-----------+----------+
+| StudentID | FirstName | UniqueID |
++-----------+-----------+----------+
+|         1 | Omkar     |      101 |
+|        23 | Prakash   |      123 |
+|         3 | Mohan     |      103 |
+|        42 | Ravi      |      142 |
+|         3 | Raviraj   |      103 |
+|        16 | Karan     |      116 |
+|         7 | Raj       |      107 |
+|        22 | Prasad    |      122 |
+|        34 | Vishal    |      134 |
++-----------+-----------+----------+
+9 rows in set (0.00 sec)
+
+mysql> SELECT UPPER(FirstName) AS UpperName
+    -> FROM Students;
++-----------+
+| UpperName |
++-----------+
+| OMKAR     |
+| PRAKASH   |
+| MOHAN     |
+| RAVI      |
+| RAVIRAJ   |
+| KARAN     |
+| RAJ       |
+| PRASAD    |
+| VISHAL    |
++-----------+
+9 rows in set (0.00 sec)
+
+mysql> UPDATE Students
+    -> SET DOB = '2003-11-23'
+    -> WHERE FirstName = 'Ravi' AND LastName = 'Kharade';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> DELETE FROM Students
+    -> WHERE FirstName = 'Vishal';
+Query OK, 1 row affected (0.00 sec)
+
+mysql> SELECT * FROM Students;
++-----------+-----------+----------+------------+-------------+
+| StudentID | FirstName | LastName | DOB        | Department  |
++-----------+-----------+----------+------------+-------------+
+|         1 | Omkar     | Sonawane | 2005-12-30 | Computer    |
+|        23 | Prakash   | Kumar    | 2002-08-22 | Mechanical  |
+|         3 | Mohan     | Shitole  | 2004-02-01 | Computer    |
+|        42 | Ravi      | Kharade  | 2003-11-23 | Civil       |
+|         3 | Raviraj   | Kharade  | 2005-11-01 | Mechanical  |
+|        16 | Karan     | Mane     | 2004-05-21 | Computer    |
+|         7 | Raj       | Sonawane | 2004-10-01 | Electrical  |
+|        22 | Prasad    | Kakade   | 2005-12-11 | Auto Mobile |
++-----------+-----------+----------+------------+-------------+
+8 rows in set (0.00 sec)
+
+mysql> CREATE TABLE Club_Members (
+    -> StudentID INT,
+    -> FirstName VARCHAR(40),
+    -> LastName VARCHAR(40),
+    -> ClubName VARCHAR(50)
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> INSERT INTO Club_Members (StudentID, FirstName, LastName, ClubName)
+    -> VALUES
+    -> (1, 'Omkar', 'Sonawane', 'Sports'),
+    -> (23, 'Prakash', 'Kumar', 'Sports'),
+    -> (3, 'Mohan', 'Shitole', 'Coding'),
+    -> (12, 'Ravi', 'Kharade', 'Coding'),
+    -> (43, 'Vishnu', 'Shemane', 'Art Club'),
+    -> (24, 'Suraj', 'Shinde', 'Art Club');
+Query OK, 6 rows affected (0.00 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> SELECT FirstName, LastName FROM Students
+    -> UNION
+    -> SELECT FirstName, LastName FROM Club_Members;
++-----------+----------+
+| FirstName | LastName |
++-----------+----------+
+| Omkar     | Sonawane |
+| Prakash   | Kumar    |
+| Mohan     | Shitole  |
+| Ravi      | Kharade  |
+| Raviraj   | Kharade  |
+| Karan     | Mane     |
+| Raj       | Sonawane |
+| Prasad    | Kakade   |
+| Vishnu    | Shemane  |
+| Suraj     | Shinde   |
++-----------+----------+
+10 rows in set (0.05 sec)
+
+mysql> SELECT FirstName, LastName FROM Students
+    -> UNION ALL
+    -> SELECT FirstName, LastName FROM Club_Members;
++-----------+----------+
+| FirstName | LastName |
++-----------+----------+
+| Omkar     | Sonawane |
+| Prakash   | Kumar    |
+| Mohan     | Shitole  |
+| Ravi      | Kharade  |
+| Raviraj   | Kharade  |
+| Karan     | Mane     |
+| Raj       | Sonawane |
+| Prasad    | Kakade   |
+| Omkar     | Sonawane |
+| Prakash   | Kumar    |
+| Mohan     | Shitole  |
+| Ravi      | Kharade  |
+| Vishnu    | Shemane  |
+| Suraj     | Shinde   |
++-----------+----------+
+14 rows in set (0.00 sec)
+
+mysql> SELECT s.FirstName, s.LastName
+    -> FROM Students s
+    -> INNER JOIN Club_Members sa
+    -> ON s.FirstName = sa.FirstName AND s.LastName = sa.LastName;
++-----------+----------+
+| FirstName | LastName |
++-----------+----------+
+| Omkar     | Sonawane |
+| Prakash   | Kumar    |
+| Mohan     | Shitole  |
+| Ravi      | Kharade  |
++-----------+----------+
+4 rows in set (0.00 sec)
+
+mysql> 

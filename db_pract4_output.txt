@@ -1,0 +1,148 @@
+mysql> USE CollegeDB;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> SELECT s.StudentID, s.FirstName, s.LastName, s.Department, c.ClubName
+    -> FROM Students s
+    -> INNER JOIN Club_Members c ON s.StudentID = c.StudentID;
++-----------+-----------+----------+------------+----------+
+| StudentID | FirstName | LastName | Department | ClubName |
++-----------+-----------+----------+------------+----------+
+|         1 | Omkar     | Sonawane | Computer   | Sports   |
+|        23 | Prakash   | Kumar    | Mechanical | Sports   |
+|         3 | Mohan     | Shitole  | Computer   | Coding   |
+|         3 | Raviraj   | Kharade  | Mechanical | Coding   |
++-----------+-----------+----------+------------+----------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT s.StudentID, s.FirstName, s.LastName, c.ClubName
+    -> FROM Students s
+    -> LEFT JOIN Club_Members c ON s.StudentID = c.StudentID;
++-----------+-----------+----------+----------+
+| StudentID | FirstName | LastName | ClubName |
++-----------+-----------+----------+----------+
+|         1 | Omkar     | Sonawane | Sports   |
+|        23 | Prakash   | Kumar    | Sports   |
+|         3 | Mohan     | Shitole  | Coding   |
+|        42 | Ravi      | Kharade  | NULL     |
+|         3 | Raviraj   | Kharade  | Coding   |
+|        16 | Karan     | Mane     | NULL     |
+|         7 | Raj       | Sonawane | NULL     |
+|        22 | Prasad    | Kakade   | NULL     |
++-----------+-----------+----------+----------+
+8 rows in set (0.00 sec)
+
+mysql> SELECT s.StudentID, s.FirstName, s.LastName, c.ClubName
+    -> FROM Students s
+    -> RIGHT JOIN Club_Members c ON s.StudentID = c.StudentID;
++-----------+-----------+----------+----------+
+| StudentID | FirstName | LastName | ClubName |
++-----------+-----------+----------+----------+
+|         1 | Omkar     | Sonawane | Sports   |
+|        23 | Prakash   | Kumar    | Sports   |
+|         3 | Raviraj   | Kharade  | Coding   |
+|         3 | Mohan     | Shitole  | Coding   |
+|      NULL | NULL      | NULL     | Coding   |
+|      NULL | NULL      | NULL     | Art Club |
+|      NULL | NULL      | NULL     | Art Club |
++-----------+-----------+----------+----------+
+7 rows in set (0.00 sec)
+
+mysql> SELECT s.StudentID, s.FirstName, s.LastName, c.ClubName
+    -> FROM Students s
+    -> CROSS JOIN Club_Members c ON s.StudentID = c.StudentID;
++-----------+-----------+----------+----------+
+| StudentID | FirstName | LastName | ClubName |
++-----------+-----------+----------+----------+
+|         1 | Omkar     | Sonawane | Sports   |
+|        23 | Prakash   | Kumar    | Sports   |
+|         3 | Mohan     | Shitole  | Coding   |
+|         3 | Raviraj   | Kharade  | Coding   |
++-----------+-----------+----------+----------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT s.StudentID, s.FirstName, s.LastName, c.ClubName
+    -> FROM Students s
+    -> LEFT JOIN Club_Members c ON s.StudentID = c.StudentID
+    -> UNION
+    -> SELECT s.StudentID, s.FirstName, s.LastName, c.ClubName
+    -> FROM Students s
+    -> RIGHT JOIN Club_Members c ON s.StudentID = c.StudentID;
++-----------+-----------+----------+----------+
+| StudentID | FirstName | LastName | ClubName |
++-----------+-----------+----------+----------+
+|         1 | Omkar     | Sonawane | Sports   |
+|        23 | Prakash   | Kumar    | Sports   |
+|         3 | Mohan     | Shitole  | Coding   |
+|        42 | Ravi      | Kharade  | NULL     |
+|         3 | Raviraj   | Kharade  | Coding   |
+|        16 | Karan     | Mane     | NULL     |
+|         7 | Raj       | Sonawane | NULL     |
+|        22 | Prasad    | Kakade   | NULL     |
+|      NULL | NULL      | NULL     | Coding   |
+|      NULL | NULL      | NULL     | Art Club |
++-----------+-----------+----------+----------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Students
+    -> WHERE DOB = (
+    ->     SELECT MIN(DOB) FROM Students
+    -> );
++-----------+-----------+----------+------------+------------+
+| StudentID | FirstName | LastName | DOB        | Department |
++-----------+-----------+----------+------------+------------+
+|        23 | Prakash   | Kumar    | 2002-08-22 | Mechanical |
++-----------+-----------+----------+------------+------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM Students
+    -> WHERE Department IN (
+    ->     SELECT DISTINCT Department FROM Students
+    ->     WHERE Department IN ('Science', 'Arts')
+    -> );
+Empty set (0.00 sec)
+
+mysql> SELECT s.StudentID, s.FirstName
+    -> FROM Students s
+    -> WHERE EXISTS (
+    ->     SELECT 1 FROM Club_Members c
+    ->     WHERE c.FirstName = s.FirstName
+    -> );
++-----------+-----------+
+| StudentID | FirstName |
++-----------+-----------+
+|         1 | Omkar     |
+|        23 | Prakash   |
+|         3 | Mohan     |
+|        42 | Ravi      |
++-----------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> CREATE VIEW BasicStudentView AS
+    -> SELECT StudentID, FirstName, LastName, Department
+    -> FROM Students;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> CREATE VIEW StudentClubView AS
+    -> SELECT s.StudentID, s.FirstName, s.LastName, c.ClubName
+    -> FROM Students s
+    -> JOIN Club_Members c ON s.StudentID = c.StudentID;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> SELECT * FROM BasicStudentView;
++-----------+-----------+----------+-------------+
+| StudentID | FirstName | LastName | Department  |
++-----------+-----------+----------+-------------+
+|         1 | Omkar     | Sonawane | Computer    |
+|        23 | Prakash   | Kumar    | Mechanical  |
+|         3 | Mohan     | Shitole  | Computer    |
+|        42 | Ravi      | Kharade  | Civil       |
+|         3 | Raviraj   | Kharade  | Mechanical  |
+|        16 | Karan     | Mane     | Computer    |
+|         7 | Raj       | Sonawane | Electrical  |
+|        22 | Prasad    | Kakade   | Auto Mobile |
++-----------+-----------+----------+-------------+
+8 rows in set (0.00 sec)
+
+mysql> 

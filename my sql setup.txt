@@ -4,9 +4,6 @@ sudo apt update
 # Install the MySQL server
 sudo apt install mysql-server
 
-# Secure the MySQL installation (interactive script)
-sudo mysql_secure_installation
-
 # To check if the MySQL service is running
 sudo service mysql status
 
