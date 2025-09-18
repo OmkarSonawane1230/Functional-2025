@@ -180,13 +180,13 @@ wget https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/9.3.0/mysql-conn
 You can move the `.jar` file to a `lib/` folder and always reference it:
 ```bash
 mkdir lib
-mv mysql-connector-java-8.0.33/mysql-connector-java-8.0.33.jar lib/
+mv mysql-connector-j-9.3.0.jar lib/
 ```
 
 Then compile and run like:
 ```bash
-javac -cp .:lib/mysql-connector-java-8.0.33.jar MySQLInJava.java
-java -cp .:lib/mysql-connector-java-8.0.33.jar MySQLInJava
+javac -cp .:lib/mysql-connector-j-9.3.0.jar MySQLInJava.java
+java -cp .:lib/mysql-connector-j-9.3.0.jar MySQLInJava
 ```
 
 **Step 2: Java Code (`MySQLInJava.java`)**

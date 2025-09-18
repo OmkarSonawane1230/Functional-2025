@@ -1,0 +1,119 @@
+mysql> USE CollegeDB;
+Database changed
+mysql> CREATE TABLE Stud_Marks (
+    ->     Roll INT AUTO_INCREMENT PRIMARY KEY,
+    ->     Name VARCHAR(50),
+    ->     Total_Marks INT
+    -> );
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> INSERT INTO Stud_Marks(Name, Total_Marks) VALUES
+    -> ('Amit Sharma', 1200),
+    -> ('Sita Rani', 980),
+    -> ('Ramesh Kumar', 890),
+    -> ('Geeta Joshi', 810),
+    -> ('Vikas Patel', 1500),
+    -> ('Priya Nair', 905),
+    -> ('Anil Singh', 830),
+    -> ('Meena Rao', 750),
+    -> ('Rahul Verma', 999),
+    -> ('Kiran Das', 910);
+Query OK, 10 rows affected (0.00 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM Stud_Marks;
++------+--------------+-------------+
+| Roll | Name         | Total_Marks |
++------+--------------+-------------+
+|    1 | Amit Sharma  |        1200 |
+|    2 | Sita Rani    |         980 |
+|    3 | Ramesh Kumar |         890 |
+|    4 | Geeta Joshi  |         810 |
+|    5 | Vikas Patel  |        1500 |
+|    6 | Priya Nair   |         905 |
+|    7 | Anil Singh   |         830 |
+|    8 | Meena Rao    |         750 |
+|    9 | Rahul Verma  |         999 |
+|   10 | Kiran Das    |         910 |
++------+--------------+-------------+
+10 rows in set (0.00 sec)
+
+mysql> CREATE TABLE Result (
+    ->     Roll INT,
+    ->     Name VARCHAR(50),
+    ->     Class VARCHAR(30)
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> DELIMITER $
+mysql> 
+mysql> CREATE FUNCTION fn_Grade(marks INT)
+    -> RETURNS VARCHAR(30)
+    -> DETERMINISTIC
+    -> BEGIN
+    ->     DECLARE grade VARCHAR(30);
+    -> 
+    ->     IF marks BETWEEN 990 AND 1500 THEN
+    ->         SET grade = 'Distinction';
+    ->     ELSEIF marks BETWEEN 900 AND 989 THEN
+    ->         SET grade = 'First Class';
+    ->     ELSEIF marks BETWEEN 825 AND 899 THEN
+    ->         SET grade = 'Higher Second Class';
+    ->     ELSE
+    ->         SET grade = 'Fail';
+    ->     END IF;
+    -> 
+    ->     RETURN grade;
+    -> END $
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> DELIMITER $
+mysql> 
+mysql> CREATE PROCEDURE proc_Grade()
+    -> BEGIN
+    ->     DECLARE done INT DEFAULT FALSE;
+    ->     DECLARE vRoll INT;
+    ->     DECLARE vName VARCHAR(50);
+    ->     DECLARE vMarks INT;
+    -> 
+    ->     DECLARE cur CURSOR FOR 
+    ->         SELECT Roll, Name, Total_Marks FROM Stud_Marks;
+    ->     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    -> 
+    ->     OPEN cur;
+    -> 
+    ->     read_loop: LOOP
+    ->         FETCH cur INTO vRoll, vName, vMarks;
+    ->         IF done THEN
+    ->             LEAVE read_loop;
+    ->         END IF;
+    -> 
+    ->         INSERT INTO Result(Roll, Name, Class)
+    ->         VALUES(vRoll, vName, fn_Grade(vMarks));
+    ->     END LOOP;
+    -> 
+    ->     CLOSE cur;
+    -> END $
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> CALL proc_Grade();$
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> SELECT * FROM Result;$
++------+--------------+---------------------+
+| Roll | Name         | Class               |
++------+--------------+---------------------+
+|    1 | Amit Sharma  | Distinction         |
+|    2 | Sita Rani    | First Class         |
+|    3 | Ramesh Kumar | Higher Second Class |
+|    4 | Geeta Joshi  | Fail                |
+|    5 | Vikas Patel  | Distinction         |
+|    6 | Priya Nair   | First Class         |
+|    7 | Anil Singh   | Higher Second Class |
+|    8 | Meena Rao    | Fail                |
+|    9 | Rahul Verma  | Distinction         |
+|   10 | Kiran Das    | First Class         |
++------+--------------+---------------------+
+10 rows in set (0.00 sec)
+
+mysql>

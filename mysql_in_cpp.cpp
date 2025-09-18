@@ -13,7 +13,7 @@ int main() {
 
         PreparedStatement *pstmt = con->prepareStatement(
             "INSERT INTO Temp (id, name, login_status) VALUES (?, ?, ?)");
-        pstmt->setInt(1, 4);
+        pstmt->setInt(1, 9);
         pstmt->setString(2, "Diana");
         pstmt->setString(3, "Pending");
         pstmt->execute();

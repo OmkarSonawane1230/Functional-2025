@@ -1,0 +1,130 @@
+mysql> USE CollegeDB;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> CREATE TABLE Library (
+    ->     BookID INT PRIMARY KEY AUTO_INCREMENT,
+    ->     Title VARCHAR(100),
+    ->     Author VARCHAR(100),
+    ->     Published_Year INT
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> CREATE TABLE Library_Audit (
+    ->     AuditID INT PRIMARY KEY AUTO_INCREMENT,
+    ->     BookID INT,
+    ->     Title VARCHAR(100),
+    ->     Author VARCHAR(100),
+    ->     Published_Year INT,
+    ->     Operation_Type VARCHAR(20),
+    ->     Operation_Time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> DESC Library;
++----------------+--------------+------+-----+---------+----------------+
+| Field          | Type         | Null | Key | Default | Extra          |
++----------------+--------------+------+-----+---------+----------------+
+| BookID         | int          | NO   | PRI | NULL    | auto_increment |
+| Title          | varchar(100) | YES  |     | NULL    |                |
+| Author         | varchar(100) | YES  |     | NULL    |                |
+| Published_Year | int          | YES  |     | NULL    |                |
++----------------+--------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> DESC Library_Audit;
++--------+-------------+------+-----+-------------------+-------------------+
+| Field  | Type        | Null | Key | Default           | Extra             |
++--------+-------------+------+-----+-------------------+-------------------+
+| AID    | int         | NO   | PRI | NULL              | auto_increment    |
+| BID    | int         | YES  |     | NULL              |                   |
+| Title  | varchar(60) | YES  |     | NULL              |                   |
+| Op     | varchar(10) | YES  |     | NULL              |                   |
+| OpTime | timestamp   | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
++--------+-------------+------+-----+-------------------+-------------------+
+5 rows in set (0.00 sec)
+
+mysql> INSERT INTO Library (Title, Author, Published_Year) VALUES
+    -> ('Database Systems', 'C. J. Date', 2019),
+    -> ('Learning SQL', 'Alan Beaulieu', 2020),
+    -> ('PL/SQL Programming', 'Steven Feuerstein', 2018),
+    -> ('Wings of Fire', 'A. P. J. Abdul Kalam', 1999),
+    -> ('The Guide', 'R. K. Narayan', 1958),
+    -> ('Train to Pakistan', 'Khushwant Singh', 1956),
+    -> ('Clean Code', 'Robert C. Martin', 2008),
+    -> ('Design Patterns', 'Erich Gamma', 1994),
+    -> ('Introduction to Algorithms', 'Thomas H. Cormen', 2009),
+    -> ('Effective Java', 'Joshua Bloch', 2017),
+    -> ('The Pragmatic Programmer', 'Andrew Hunt', 1999),
+    -> ('India After Gandhi', 'Ramachandra Guha', 2007),
+    -> ('The White Tiger', 'Aravind Adiga', 2008);
+Query OK, 13 rows affected (0.01 sec)
+Records: 13  Duplicates: 0  Warnings: 0
+
+mysql> DELIMITER $
+mysql> 
+mysql> CREATE TRIGGER trg_Library_Update
+    -> AFTER UPDATE ON Library
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     INSERT INTO Library_Audit(BID, Title, Op)
+    ->     VALUES (OLD.BookID, OLD.Title, 'UPDATE');
+    -> END $
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> DELIMITER $
+mysql> 
+mysql> CREATE TRIGGER trg_Library_Delete
+    -> AFTER DELETE ON Library
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     INSERT INTO Library_Audit(BID, Title, Op)
+    ->     VALUES (OLD.BookID, OLD.Title, 'DELETE');
+    -> END $
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> UPDATE Library SET Published_Year = 2005 WHERE BookID = 9;$
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> DELETE FROM Library WHERE BookID = 7;$
+Query OK, 1 row affected (0.00 sec)
+
+mysql> DELETE FROM Library WHERE BookID = 2;$
+Query OK, 1 row affected (0.00 sec)
+
+mysql> UPDATE Library SET Author = 'Chris Date' WHERE BookID = 1;$
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM Library;$
++--------+----------------------------+----------------------+----------------+
+| BookID | Title                      | Author               | Published_Year |
++--------+----------------------------+----------------------+----------------+
+|      1 | Database Systems           | Chris Date           |           2019 |
+|      3 | PL/SQL Programming         | Steven Feuerstein    |           2018 |
+|      4 | Wings of Fire              | A. P. J. Abdul Kalam |           1999 |
+|      5 | The Guide                  | R. K. Narayan        |           1958 |
+|      6 | Train to Pakistan          | Khushwant Singh      |           1956 |
+|      8 | Design Patterns            | Erich Gamma          |           1994 |
+|      9 | Introduction to Algorithms | Thomas H. Cormen     |           2005 |
+|     10 | Effective Java             | Joshua Bloch         |           2017 |
+|     11 | The Pragmatic Programmer   | Andrew Hunt          |           1999 |
+|     12 | India After Gandhi         | Ramachandra Guha     |           2007 |
+|     13 | The White Tiger            | Aravind Adiga        |           2008 |
++--------+----------------------------+----------------------+----------------+
+11 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Library_Audit;$
++-----+------+----------------------------+--------+---------------------+
+| AID | BID  | Title                      | Op     | OpTime              |
++-----+------+----------------------------+--------+---------------------+
+|   1 |    9 | Introduction to Algorithms | UPDATE | 2025-09-18 12:21:34 |
+|   2 |    7 | Clean Code                 | DELETE | 2025-09-18 12:22:04 |
+|   3 |    2 | Learning SQL               | DELETE | 2025-09-18 12:22:11 |
+|   4 |    1 | Database Systems           | UPDATE | 2025-09-18 12:22:22 |
++-----+------+----------------------------+--------+---------------------+
+4 rows in set (0.00 sec)
+
+mysql> 
