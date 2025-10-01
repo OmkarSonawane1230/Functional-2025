@@ -1,0 +1,121 @@
+do this setup first 
+mkdir lib
+cd lib
+wget https://repo1.maven.org/maven2/org/mongodb/mongodb-driver-sync/4.11.0/mongodb-driver-sync-4.11.0.jar
+wget https://repo1.maven.org/maven2/org/mongodb/mongodb-driver-core/4.11.0/mongodb-driver-core-4.11.0.jar
+wget https://repo1.maven.org/maven2/org/mongodb/bson/4.11.0/bson-4.11.0.jar
+cd ..
+
+and make sure that mongodb sever is running before running the program
+
+
+$ javac -cp "lib/*" MongoDBNavigation.java
+$ java -cp ".:lib/*" MongoDBNavigation
+Oct 01, 2025 9:37:21 AM com.mongodb.internal.diagnostics.logging.Loggers shouldUseSLF4J
+WARNING: SLF4J not found on the classpath.  Logging is disabled for the 'org.mongodb.driver' component
+
+--- MongoDB CRUD Menu ---
+1. Add Customer
+2. View Customers
+3. Edit Customer
+4. Delete Customer
+5. Exit
+Enter your choice: 2
+
+All Customers:
+{"_id": 1, "name": "Ramesh Sharma", "city": "Delhi", "age": 35, "active": true}
+{"_id": 2, "name": "Suresh Patil", "city": "Mumbai", "age": 42, "active": true}
+{"_id": 3, "name": "Anita Desai", "city": "Pune", "age": 29, "active": false}
+{"_id": 6, "name": "Vikram Singh", "city": "Delhi", "age": 41, "active": false}
+
+--- MongoDB CRUD Menu ---
+1. Add Customer
+2. View Customers
+3. Edit Customer
+4. Delete Customer
+5. Exit
+Enter your choice: 1 
+Enter Customer ID: 7
+Enter Name: Mahesh Kumar
+Enter City: Mumbai
+Enter Age: 34
+Is Active (true/false): true
+Customer added successfully!
+
+--- MongoDB CRUD Menu ---
+1. Add Customer
+2. View Customers
+3. Edit Customer
+4. Delete Customer
+5. Exit
+Enter your choice: 2
+
+All Customers:
+{"_id": 1, "name": "Ramesh Sharma", "city": "Delhi", "age": 35, "active": true}
+{"_id": 2, "name": "Suresh Patil", "city": "Mumbai", "age": 42, "active": true}
+{"_id": 3, "name": "Anita Desai", "city": "Pune", "age": 29, "active": false}
+{"_id": 6, "name": "Vikram Singh", "city": "Delhi", "age": 41, "active": false}
+{"_id": 7, "name": "Mahesh Kumar", "city": "Mumbai", "age": 34, "active": true}
+
+--- MongoDB CRUD Menu ---
+1. Add Customer
+2. View Customers
+3. Edit Customer
+4. Delete Customer
+5. Exit
+Enter your choice: 3
+Enter Customer ID to edit: 6
+Enter new Name: Vikram Sharma
+Enter new City: Delhi
+Enter new Age: 42
+Is Active (true/false): true
+Customer updated successfully!
+
+--- MongoDB CRUD Menu ---
+1. Add Customer
+2. View Customers
+3. Edit Customer
+4. Delete Customer
+5. Exit
+Enter your choice: 2
+
+All Customers:
+{"_id": 1, "name": "Ramesh Sharma", "city": "Delhi", "age": 35, "active": true}
+{"_id": 2, "name": "Suresh Patil", "city": "Mumbai", "age": 42, "active": true}
+{"_id": 3, "name": "Anita Desai", "city": "Pune", "age": 29, "active": false}
+{"_id": 6, "name": "Vikram Sharma", "city": "Delhi", "age": 42, "active": true}
+{"_id": 7, "name": "Mahesh Kumar", "city": "Mumbai", "age": 34, "active": true}
+
+--- MongoDB CRUD Menu ---
+1. Add Customer
+2. View Customers
+3. Edit Customer
+4. Delete Customer
+5. Exit
+Enter your choice: 4
+Enter Customer ID to delete: 3
+Customer deleted successfully!
+
+--- MongoDB CRUD Menu ---
+1. Add Customer
+2. View Customers
+3. Edit Customer
+4. Delete Customer
+5. Exit
+Enter your choice: 2
+
+All Customers:
+{"_id": 1, "name": "Ramesh Sharma", "city": "Delhi", "age": 35, "active": true}
+{"_id": 2, "name": "Suresh Patil", "city": "Mumbai", "age": 42, "active": true}
+{"_id": 6, "name": "Vikram Sharma", "city": "Delhi", "age": 42, "active": true}
+{"_id": 7, "name": "Mahesh Kumar", "city": "Mumbai", "age": 34, "active": true}
+
+--- MongoDB CRUD Menu ---
+1. Add Customer
+2. View Customers
+3. Edit Customer
+4. Delete Customer
+5. Exit
+Enter your choice: 5   
+Exiting...
+$ 

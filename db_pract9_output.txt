@@ -1,40 +1,3 @@
-@OmkarSonawane1230 ➜ /workspaces/Functional-2025 (main) $ docker run -d \
-  --name mongodb \
-  -p 27017:27017 \
-  -e MONGO_INITDB_ROOT_USERNAME=root \
-  -e MONGO_INITDB_ROOT_PASSWORD=example \
-  mongo:6.0
-Unable to find image 'mongo:6.0' locally
-6.0: Pulling from library/mongo
-60d98d907669: Pull complete 
-8a47d1dc7ddb: Pull complete 
-2b8fa2df2a1a: Pull complete 
-4d2d9c217764: Pull complete 
-e8375ea5eafa: Pull complete 
-085259f2d883: Pull complete 
-801d080ac008: Pull complete 
-faca1a662cf8: Pull complete 
-Digest: sha256:16118486b1c7e672a0d9a1e7f59e3a510eeb0038629ceb678eb43f8029eb77d6
-Status: Downloaded newer image for mongo:6.0
-8682875bb587c4bd673bd8cb4bd8d7bbcfac1702489b45375ecbd90ee90fd441
-@OmkarSonawane1230 ➜ /workspaces/Functional-2025 (main) $ docker exec -it mongodb mongosh -u root -p example
-Current Mongosh Log ID: 68dcef1415b30c25aace5f46
-Connecting to:          mongodb://<credentials>@127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.5.8
-Using MongoDB:          6.0.26
-Using Mongosh:          2.5.8
-
-For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
-
-
-To help improve our products, anonymous usage data is collected and sent to MongoDB periodically (https://www.mongodb.com/legal/privacy-policy).
-You can opt-out by running the disableTelemetry() command.
-
-------
-   The server generated these startup warnings when booting
-   2025-10-01T09:06:25.947+00:00: Using the XFS filesystem is strongly recommended with the WiredTiger storage engine. See http://dochub.mongodb.org/core/prodnotes-filesystem
-   2025-10-01T09:06:26.388+00:00: /sys/kernel/mm/transparent_hugepage/enabled is 'always'. We suggest setting it to 'never' in this binary version
-   2025-10-01T09:06:26.388+00:00: Soft rlimits for open file descriptors too low
-------
 
 test> use mydb;
 switched to db mydb
@@ -127,14 +90,6 @@ mydb> db.customers.deleteOne({ _id: 5 });
 mydb> db.customers.deleteMany({ city: "Chennai" });
 ... 
 { acknowledged: true, deletedCount: 1 }
-mydb> db.customers.save({
-...   _id: 6,
-...   name: "Vikram Singh",
-...   city: "Delhi",
-...   age: 40,
-...   active: true
-... });
-TypeError: db.customers.save is not a function
 mydb> db.customers.insertOne({
 ...   _id: 6,
 ...   name: "Vikram Singh",
@@ -227,19 +182,6 @@ mydb> db.customers.find({
     city: 'Mumbai',
     age: 42,
     active: true
-  }
-]
-mydb> db.students.insertMany([
-...   { id: 1, name: 'Ryan', gender: 'M' },
-...   { id: 2, name: 'Joanna', gender: 'F' }
-... ]);
-... db.students.find({ gender: 'F' });
-[
-  {
-    _id: ObjectId('68dcf1d015b30c25aace5f48'),
-    id: 2,
-    name: 'Joanna',
-    gender: 'F'
   }
 ]
 mydb> 

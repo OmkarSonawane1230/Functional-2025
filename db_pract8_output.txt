@@ -1,0 +1,106 @@
+mysql> USE CollegeDB;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> CREATE TABLE Cust_Old (
+    ->     CustID INT PRIMARY KEY,
+    ->     CustName VARCHAR(100),
+    ->     City VARCHAR(50)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> CREATE TABLE Cust_New (
+    ->     CustID INT PRIMARY KEY,
+    ->     CustName VARCHAR(100),
+    ->     City VARCHAR(50)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> INSERT INTO Cust_Old (CustID, CustName, City) VALUES
+    -> (1, 'Ramesh Sharma', 'Delhi'),
+    -> (2, 'Suresh Patil', 'Mumbai'),
+    -> (3, 'Anita Desai', 'Pune');
+Query OK, 3 rows affected (0.00 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Cust_New (CustID, CustName, City) VALUES
+    -> (2, 'Suresh Patil', 'Mumbai'),
+    -> (3, 'Anita Desai', 'Pune'),
+    -> (4, 'Vikram Singh', 'Delhi'),
+    -> (5, 'Priya Iyer', 'Chennai'),
+    -> (6, 'Rahul Mehta', 'Pune');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> DELIMITER $
+mysql> 
+mysql> CREATE PROCEDURE Merge_Customers_ByCity(IN city_param VARCHAR(50))
+    -> BEGIN
+    ->     DECLARE v_id INT;
+    ->     DECLARE v_name VARCHAR(100);
+    ->     DECLARE v_city VARCHAR(50);
+    ->     DECLARE done INT DEFAULT 0;
+    -> 
+    ->     -- Cursor: fetch customers from Cust_New for the given city
+    ->     DECLARE cur CURSOR FOR 
+    ->         SELECT CustID, CustName, City 
+    ->         FROM Cust_New 
+    ->         WHERE City = city_param;
+    -> 
+    ->     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+    -> 
+    ->     OPEN cur;
+    -> 
+    ->     read_loop: LOOP
+    ->         FETCH cur INTO v_id, v_name, v_city;
+    ->         IF done = 1 THEN
+    ->             LEAVE read_loop;
+    ->         END IF;
+    -> 
+    ->         -- Insert only if not exists in Cust_Old
+    ->         IF NOT EXISTS (SELECT 1 FROM Cust_Old WHERE CustID = v_id) THEN
+    ->             INSERT INTO Cust_Old (CustID, CustName, City) 
+    ->             VALUES (v_id, v_name, v_city);
+    ->         END IF;
+    ->     END LOOP;
+    -> 
+    ->     CLOSE cur;
+    -> END $
+Query OK, 0 rows affected (0.20 sec)
+
+mysql> CALL Merge_Customers_ByCity('Pune');$
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> CALL Merge_Customers_ByCity('Delhi');$
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SELECT * FROM Cust_Old;$
++--------+---------------+--------+
+| CustID | CustName      | City   |
++--------+---------------+--------+
+|      1 | Ramesh Sharma | Delhi  |
+|      2 | Suresh Patil  | Mumbai |
+|      3 | Anita Desai   | Pune   |
+|      4 | Vikram Singh  | Delhi  |
+|      6 | Rahul Mehta   | Pune   |
++--------+---------------+--------+
+5 rows in set (0.00 sec)
+
+mysql> CALL Merge_Customers_ByCity('Chennai');$
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> SELECT * FROM Cust_Old;$
++--------+---------------+---------+
+| CustID | CustName      | City    |
++--------+---------------+---------+
+|      1 | Ramesh Sharma | Delhi   |
+|      2 | Suresh Patil  | Mumbai  |
+|      3 | Anita Desai   | Pune    |
+|      4 | Vikram Singh  | Delhi   |
+|      5 | Priya Iyer    | Chennai |
+|      6 | Rahul Mehta   | Pune    |
++--------+---------------+---------+
+6 rows in set (0.00 sec)
+
+mysql> 

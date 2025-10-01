@@ -1,0 +1,162 @@
+test> use newdb;
+switched to db newdb
+newdb> db.customers.insertMany([
+...   { _id: 1, name: "Ramesh Sharma", city: "Delhi", age: 35, active: true },
+...   { _id: 2, name: "Suresh Patil", city: "Mumbai", age: 42, active: true },
+...   { _id: 3, name: "Anita Desai", city: "Pune", age: 29, active: false },
+...   { _id: 4, name: "Priya Iyer", city: "Chennai", age: 31, active: true },
+...   { _id: 5, name: "Rahul Mehta", city: "Pune", age: 27, active: true },
+...   { _id: 6, name: "Vikram Singh", city: "Delhi", age: 40, active: false }
+... ]);
+... 
+{
+  acknowledged: true,
+  insertedIds: { '0': 1, '1': 2, '2': 3, '3': 4, '4': 5, '5': 6 }
+}
+newdb> db.customers.aggregate([
+...   { $group: { _id: "$city", total_customers: { $sum: 1 } } }
+... ]);
+... 
+[
+  { _id: 'Delhi', total_customers: 2 },
+  { _id: 'Chennai', total_customers: 1 },
+  { _id: 'Pune', total_customers: 2 },
+  { _id: 'Mumbai', total_customers: 1 }
+]
+newdb> db.customers.aggregate([
+...   { $group: { _id: "$city", avg_age: { $avg: "$age" } } }
+... ]);
+... 
+[
+  { _id: 'Delhi', avg_age: 37.5 },
+  { _id: 'Chennai', avg_age: 31 },
+  { _id: 'Pune', avg_age: 28 },
+  { _id: 'Mumbai', avg_age: 42 }
+]
+newdb> db.customers.aggregate([
+...   { $match: { active: true } },
+...   { $group: { _id: "$city", active_count: { $sum: 1 } } }
+... ]);
+... 
+[
+  { _id: 'Delhi', active_count: 1 },
+  { _id: 'Chennai', active_count: 1 },
+  { _id: 'Pune', active_count: 1 },
+  { _id: 'Mumbai', active_count: 1 }
+]
+newdb> db.customers.createIndex({ city: 1 });
+... 
+city_1
+newdb> db.customers.getIndexes();
+... 
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { city: 1 }, name: 'city_1' }
+]
+newdb> db.customers.find({ city: "Pune" }).explain("executionStats");
+... 
+{
+  explainVersion: '1',
+  queryPlanner: {
+    namespace: 'newdb.customers',
+    indexFilterSet: false,
+    parsedQuery: { city: { '$eq': 'Pune' } },
+    queryHash: '96110838',
+    planCacheKey: '5B786561',
+    maxIndexedOrSolutionsReached: false,
+    maxIndexedAndSolutionsReached: false,
+    maxScansToExplodeReached: false,
+    winningPlan: {
+      stage: 'FETCH',
+      inputStage: {
+        stage: 'IXSCAN',
+        keyPattern: { city: 1 },
+        indexName: 'city_1',
+        isMultiKey: false,
+        multiKeyPaths: { city: [] },
+        isUnique: false,
+        isSparse: false,
+        isPartial: false,
+        indexVersion: 2,
+        direction: 'forward',
+        indexBounds: { city: [ '["Pune", "Pune"]' ] }
+      }
+    },
+    rejectedPlans: []
+  },
+  executionStats: {
+    executionSuccess: true,
+    nReturned: 2,
+    executionTimeMillis: 0,
+    totalKeysExamined: 2,
+    totalDocsExamined: 2,
+    executionStages: {
+      stage: 'FETCH',
+      nReturned: 2,
+      executionTimeMillisEstimate: 0,
+      works: 3,
+      advanced: 2,
+      needTime: 0,
+      needYield: 0,
+      saveState: 0,
+      restoreState: 0,
+      isEOF: 1,
+      docsExamined: 2,
+      alreadyHasObj: 0,
+      inputStage: {
+        stage: 'IXSCAN',
+        nReturned: 2,
+        executionTimeMillisEstimate: 0,
+        works: 3,
+        advanced: 2,
+        needTime: 0,
+        needYield: 0,
+        saveState: 0,
+        restoreState: 0,
+        isEOF: 1,
+        keyPattern: { city: 1 },
+        indexName: 'city_1',
+        isMultiKey: false,
+        multiKeyPaths: { city: [] },
+        isUnique: false,
+        isSparse: false,
+        isPartial: false,
+        indexVersion: 2,
+        direction: 'forward',
+        indexBounds: { city: [ '["Pune", "Pune"]' ] },
+        keysExamined: 2,
+        seeks: 1,
+        dupsTested: 0,
+        dupsDropped: 0
+      }
+    }
+  },
+  command: { find: 'customers', filter: { city: 'Pune' }, '$db': 'newdb' },
+  serverInfo: {
+    host: '8682875bb587',
+    port: 27017,
+    version: '6.0.26',
+    gitVersion: '0c4ec4b6005f75582ce208fc800f09f561b6c2e8'
+  },
+  serverParameters: {
+    internalQueryFacetBufferSizeBytes: 104857600,
+    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+    internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+    internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+    internalQueryProhibitBlockingMergeOnMongoS: 0,
+    internalQueryMaxAddToSetBytes: 104857600,
+    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600
+  },
+  ok: 1
+}
+newdb> db.customers.createIndex({ city: 1, age: -1 });
+... 
+city_1_age_-1
+newdb> db.customers.find({ city: "Pune" }).sort({ age: -1 });
+... 
+[
+  { _id: 3, name: 'Anita Desai', city: 'Pune', age: 29, active: false },
+  { _id: 5, name: 'Rahul Mehta', city: 'Pune', age: 27, active: true }
+]
+newdb> 
