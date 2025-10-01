@@ -4,9 +4,9 @@ import java.util.Scanner;
 public class MySQL_DBNavigation {
 
     public static void main(String[] args) {
-        String url = "jdbc:mysql://localhost:3306/CollegeDB"; // Database URL
-        String user = "root"; // MySQL username
-        String password = "mysql123"; // MySQL password
+        String url = "jdbc:mysql://localhost:3306/CollegeDB";   // Database URL
+        String user = "root";                                   // MySQL username
+        String password = "mysql123";                           // MySQL password
 
         try (Connection con = DriverManager.getConnection(url, user, password);
              Scanner sc = new Scanner(System.in)) {
