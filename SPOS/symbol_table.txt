@@ -1,8 +1,0 @@
-Symbol | Address | Length | Defined
-----------------------------------
-MOVER  | 200     | 0      | True
-X      | 210     | 1      | True
-L1     | 201     | 0      | True
-NEXT   | 204     | 0      | True
-BACK   | 201     | 0      | True
-MULT   | 209     | 0      | True
