@@ -1,0 +1,732 @@
+@OmkarSonawane1230 ➜ /workspaces/Functional-2025 (main) $ mongosh
+Current Mongosh Log ID: 6907153818a959acd49dc29c
+Connecting to:          mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.5.9
+Using MongoDB:          8.2.1
+Using Mongosh:          2.5.9
+
+For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
+
+------
+   The server generated these startup warnings when booting
+   2025-11-02T07:53:52.427+00:00: Using the XFS filesystem is strongly recommended with the WiredTiger storage engine. See http://dochub.mongodb.org/core/prodnotes-filesystem
+   2025-11-02T07:53:52.701+00:00: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+   2025-11-02T07:53:52.701+00:00: Soft rlimits for open file descriptors too low
+   2025-11-02T07:53:52.701+00:00: For customers running the current memory allocator, we suggest changing the contents of the following sysfsFile
+   2025-11-02T07:53:52.701+00:00: We suggest setting the contents of sysfsFile to 0.
+------
+
+test> use mydb;
+switched to db mydb
+mydb> db.dnyanraj.insertOne({
+... id: 1,
+... name: "asdfc asfd",
+... city: "pune",
+... age: 20,
+... active: true
+... });
+{
+  acknowledged: true,
+  insertedId: ObjectId('6907157118a959acd49dc29d')
+}
+mydb> db.find();
+TypeError: db.find is not a function
+mydb> db.dnyanraj.find();
+[
+  {
+    _id: ObjectId('6907157118a959acd49dc29d'),
+    id: 1,
+    name: 'asdfc asfd',
+    city: 'pune',
+    age: 20,
+    active: true
+  }
+]
+mydb> db.dnyanraj.insertOne({ id: 1, name: "raj more", city: "pune", age: 20, active: true });
+{
+  acknowledged: true,
+  insertedId: ObjectId('690715ab18a959acd49dc29e')
+}
+mydb> db.dnyanraj.find();
+[
+  {
+    _id: ObjectId('6907157118a959acd49dc29d'),
+    id: 1,
+    name: 'asdfc asfd',
+    city: 'pune',
+    age: 20,
+    active: true
+  },
+  {
+    _id: ObjectId('690715ab18a959acd49dc29e'),
+    id: 1,
+    name: 'raj more',
+    city: 'pune',
+    age: 20,
+    active: true
+  }
+]
+mydb> db.dnyanraj.insertMany([
+... {id: 2, name: "subahash sdf", city: "malegaon", age: 23, active: false},
+... {id: 3, name: "dsadf sdf", city: "mumbai", age: 33, active: true}
+... ])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('690716bd18a959acd49dc29f'),
+    '1': ObjectId('690716bd18a959acd49dc2a0')
+  }
+}
+mydb> db.dnyanraj.find();
+[
+  {
+    _id: ObjectId('6907157118a959acd49dc29d'),
+    id: 1,
+    name: 'asdfc asfd',
+    city: 'pune',
+    age: 20,
+    active: true
+  },
+  {
+    _id: ObjectId('690715ab18a959acd49dc29e'),
+    id: 1,
+    name: 'raj more',
+    city: 'pune',
+    age: 20,
+    active: true
+  },
+  {
+    _id: ObjectId('690716bd18a959acd49dc29f'),
+    id: 2,
+    name: 'subahash sdf',
+    city: 'malegaon',
+    age: 23,
+    active: false
+  },
+  {
+    _id: ObjectId('690716bd18a959acd49dc2a0'),
+    id: 3,
+    name: 'dsadf sdf',
+    city: 'mumbai',
+    age: 33,
+    active: true
+  }
+]
+mydb> db.dnyanraj.find({ active: true });
+[
+  {
+    _id: ObjectId('6907157118a959acd49dc29d'),
+    id: 1,
+    name: 'asdfc asfd',
+    city: 'pune',
+    age: 20,
+    active: true
+  },
+  {
+    _id: ObjectId('690715ab18a959acd49dc29e'),
+    id: 1,
+    name: 'raj more',
+    city: 'pune',
+    age: 20,
+    active: true
+  },
+  {
+    _id: ObjectId('690716bd18a959acd49dc2a0'),
+    id: 3,
+    name: 'dsadf sdf',
+    city: 'mumbai',
+    age: 33,
+    active: true
+  }
+]
+mydb> db.dnyanraj.find({ active: false });
+[
+  {
+    _id: ObjectId('690716bd18a959acd49dc29f'),
+    id: 2,
+    name: 'subahash sdf',
+    city: 'malegaon',
+    age: 23,
+    active: false
+  }
+]
+mydb> db.dnyanraj.find({ active: true, city: "pune"  });
+[
+  {
+    _id: ObjectId('6907157118a959acd49dc29d'),
+    id: 1,
+    name: 'asdfc asfd',
+    city: 'pune',
+    age: 20,
+    active: true
+  },
+  {
+    _id: ObjectId('690715ab18a959acd49dc29e'),
+    id: 1,
+    name: 'raj more',
+    city: 'pune',
+    age: 20,
+    active: true
+  }
+]
+mydb> db.dnyanraj.find({}, {name: 1, age: 1});
+[
+  {
+    _id: ObjectId('6907157118a959acd49dc29d'),
+    name: 'asdfc asfd',
+    age: 20
+  },
+  {
+    _id: ObjectId('690715ab18a959acd49dc29e'),
+    name: 'raj more',
+    age: 20
+  },
+  {
+    _id: ObjectId('690716bd18a959acd49dc29f'),
+    name: 'subahash sdf',
+    age: 23
+  },
+  {
+    _id: ObjectId('690716bd18a959acd49dc2a0'),
+    name: 'dsadf sdf',
+    age: 33
+  }
+]
+mydb> db.dnyanraj.find({active: true}, {name: 1, age: 1});
+[
+  {
+    _id: ObjectId('6907157118a959acd49dc29d'),
+    name: 'asdfc asfd',
+    age: 20
+  },
+  {
+    _id: ObjectId('690715ab18a959acd49dc29e'),
+    name: 'raj more',
+    age: 20
+  },
+  {
+    _id: ObjectId('690716bd18a959acd49dc2a0'),
+    name: 'dsadf sdf',
+    age: 33
+  }
+]
+mydb> db.dnyanraj.find({city: "pune"}, {name: 1, age: 1});
+[
+  {
+    _id: ObjectId('6907157118a959acd49dc29d'),
+    name: 'asdfc asfd',
+    age: 20
+  },
+  {
+    _id: ObjectId('690715ab18a959acd49dc29e'),
+    name: 'raj more',
+    age: 20
+  }
+]
+mydb> db.dnyanraj.find({city: "pune"}, {name: 1, age: 0});
+MongoServerError[Location31254]: Cannot do exclusion on field age in inclusion projection
+mydb> db.dnyanraj.find({city: "pune"}, {name: 1, age: 1, id: 1, _id: 0});
+[
+  { id: 1, name: 'asdfc asfd', age: 20 },
+  { id: 1, name: 'raj more', age: 20 }
+]
+mydb> db.dnyanraj.find({}, {name: 1, city: 1, _id: 0})
+[
+  { name: 'asdfc asfd', city: 'pune' },
+  { name: 'raj more', city: 'pune' },
+  { name: 'subahash sdf', city: 'malegaon' },
+  { name: 'dsadf sdf', city: 'mumbai' }
+]
+mydb> db.dnyanraj.updateOne({ name: "subahash sdf" },
+... { $set: {
+... city: "mumbai"}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+mydb> db.dnyanraj.find({}, {name: 1, city: 1, _id: 0})
+[
+  { name: 'asdfc asfd', city: 'pune' },
+  { name: 'raj more', city: 'pune' },
+  { name: 'subahash sdf', city: 'mumbai' },
+  { name: 'dsadf sdf', city: 'mumbai' }
+]
+mydb> db.dnyanraj.find()
+[
+  {
+    _id: ObjectId('6907157118a959acd49dc29d'),
+    id: 1,
+    name: 'asdfc asfd',
+    city: 'pune',
+    age: 20,
+    active: true
+  },
+  {
+    _id: ObjectId('690715ab18a959acd49dc29e'),
+    id: 1,
+    name: 'raj more',
+    city: 'pune',
+    age: 20,
+    active: true
+  },
+  {
+    _id: ObjectId('690716bd18a959acd49dc29f'),
+    id: 2,
+    name: 'subahash sdf',
+    city: 'mumbai',
+    age: 23,
+    active: false
+  },
+  {
+    _id: ObjectId('690716bd18a959acd49dc2a0'),
+    id: 3,
+    name: 'dsadf sdf',
+    city: 'mumbai',
+    age: 33,
+    active: true
+  }
+]
+mydb> db.dnyanraj.updateOne({ name: "raj more" }, { $set: { dept: "computer engg" } })
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+mydb> db.dnyanraj.find()
+[
+  {
+    _id: ObjectId('6907157118a959acd49dc29d'),
+    id: 1,
+    name: 'asdfc asfd',
+    city: 'pune',
+    age: 20,
+    active: true
+  },
+  {
+    _id: ObjectId('690715ab18a959acd49dc29e'),
+    id: 1,
+    name: 'raj more',
+    city: 'pune',
+    age: 20,
+    active: true,
+    dept: 'computer engg'
+  },
+  {
+    _id: ObjectId('690716bd18a959acd49dc29f'),
+    id: 2,
+    name: 'subahash sdf',
+    city: 'mumbai',
+    age: 23,
+    active: false
+  },
+  {
+    _id: ObjectId('690716bd18a959acd49dc2a0'),
+    id: 3,
+    name: 'dsadf sdf',
+    city: 'mumbai',
+    age: 33,
+    active: true
+  }
+]
+mydb> db.dnyanraj.updateMany({ active: true }, { $set: { active: false } })
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 3,
+  modifiedCount: 3,
+  upsertedCount: 0
+}
+mydb> db.dnyanraj.find()
+[
+  {
+    _id: ObjectId('6907157118a959acd49dc29d'),
+    id: 1,
+    name: 'asdfc asfd',
+    city: 'pune',
+    age: 20,
+    active: false
+  },
+  {
+    _id: ObjectId('690715ab18a959acd49dc29e'),
+    id: 1,
+    name: 'raj more',
+    city: 'pune',
+    age: 20,
+    active: false,
+    dept: 'computer engg'
+  },
+  {
+    _id: ObjectId('690716bd18a959acd49dc29f'),
+    id: 2,
+    name: 'subahash sdf',
+    city: 'mumbai',
+    age: 23,
+    active: false
+  },
+  {
+    _id: ObjectId('690716bd18a959acd49dc2a0'),
+    id: 3,
+    name: 'dsadf sdf',
+    city: 'mumbai',
+    age: 33,
+    active: false
+  }
+]
+mydb> db.dnyanraj.updateMany({ active: false }, { $set: { active: true } })
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 4,
+  modifiedCount: 4,
+  upsertedCount: 0
+}
+mydb> db.dnyanraj.find()
+[
+  {
+    _id: ObjectId('6907157118a959acd49dc29d'),
+    id: 1,
+    name: 'asdfc asfd',
+    city: 'pune',
+    age: 20,
+    active: true
+  },
+  {
+    _id: ObjectId('690715ab18a959acd49dc29e'),
+    id: 1,
+    name: 'raj more',
+    city: 'pune',
+    age: 20,
+    active: true,
+    dept: 'computer engg'
+  },
+  {
+    _id: ObjectId('690716bd18a959acd49dc29f'),
+    id: 2,
+    name: 'subahash sdf',
+    city: 'mumbai',
+    age: 23,
+    active: true
+  },
+  {
+    _id: ObjectId('690716bd18a959acd49dc2a0'),
+    id: 3,
+    name: 'dsadf sdf',
+    city: 'mumbai',
+    age: 33,
+    active: true
+  }
+]
+mydb> db.dnyanraj.deleteOne({ active: true })
+{ acknowledged: true, deletedCount: 1 }
+mydb> db.dnyanraj.find()
+[
+  {
+    _id: ObjectId('690715ab18a959acd49dc29e'),
+    id: 1,
+    name: 'raj more',
+    city: 'pune',
+    age: 20,
+    active: true,
+    dept: 'computer engg'
+  },
+  {
+    _id: ObjectId('690716bd18a959acd49dc29f'),
+    id: 2,
+    name: 'subahash sdf',
+    city: 'mumbai',
+    age: 23,
+    active: true
+  },
+  {
+    _id: ObjectId('690716bd18a959acd49dc2a0'),
+    id: 3,
+    name: 'dsadf sdf',
+    city: 'mumbai',
+    age: 33,
+    active: true
+  }
+]
+mydb> db.dnyanraj.deleteMany({ active: true })
+{ acknowledged: true, deletedCount: 3 }
+mydb> db.dnyanraj.find()
+
+mydb> db.dnyanraj.insertMany([ { id: 2, name: "subahash sdf", city: "malegaon", age: 23, active: false }, { id: 3, name: "dsadf sdf", city: "mumbai", age: 33, active: true }] )
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('69071a3518a959acd49dc2a1'),
+    '1': ObjectId('69071a3518a959acd49dc2a2')
+  }
+}
+mydb> db.dnyanraj.insertMany([ { id: 2, name: "subahash sdf", city: "malegaon", age: 23, active: false }, { id: 3, name: "dsadf sdf", city: "mumbai", age: 33, active: true }] )
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('69071a3718a959acd49dc2a3'),
+    '1': ObjectId('69071a3718a959acd49dc2a4')
+  }
+}
+mydb> db.dnyanraj.find()
+[
+  {
+    _id: ObjectId('69071a3518a959acd49dc2a1'),
+    id: 2,
+    name: 'subahash sdf',
+    city: 'malegaon',
+    age: 23,
+    active: false
+  },
+  {
+    _id: ObjectId('69071a3518a959acd49dc2a2'),
+    id: 3,
+    name: 'dsadf sdf',
+    city: 'mumbai',
+    age: 33,
+    active: true
+  },
+  {
+    _id: ObjectId('69071a3718a959acd49dc2a3'),
+    id: 2,
+    name: 'subahash sdf',
+    city: 'malegaon',
+    age: 23,
+    active: false
+  },
+  {
+    _id: ObjectId('69071a3718a959acd49dc2a4'),
+    id: 3,
+    name: 'dsadf sdf',
+    city: 'mumbai',
+    age: 33,
+    active: true
+  }
+]
+mydb> db.dnyanraj.deleteMany({ age: { $lt: 30 } })
+{ acknowledged: true, deletedCount: 2 }
+mydb> db.dnyanraj.find()
+[
+  {
+    _id: ObjectId('69071a3518a959acd49dc2a2'),
+    id: 3,
+    name: 'dsadf sdf',
+    city: 'mumbai',
+    age: 33,
+    active: true
+  },
+  {
+    _id: ObjectId('69071a3718a959acd49dc2a4'),
+    id: 3,
+    name: 'dsadf sdf',
+    city: 'mumbai',
+    age: 33,
+    active: true
+  }
+]
+mydb> db.users.insertMany([
+...   { name: "Alice", age: 25, city: "New York", salary: 5000, status: "active" },
+...   { name: "Bob", age: 32, city: "Los Angeles", salary: 6000, status: "inactive" },
+...   { name: "Charlie", age: 29, city: "New York", salary: 7000, status: "active" },
+...   { name: "David", age: 45, city: "Chicago", salary: 8000, status: "active" },
+...   { name: "Eve", age: 22, city: "Chicago", salary: 4500, status: "inactive" },
+...   { name: "Frank", age: 36, city: "New York", salary: 9000, status: "active" },
+...   { name: "Grace", age: 28, city: "Los Angeles", salary: 7500, status: "active" },
+...   { name: "Hannah", age: 40, city: "New York", salary: 8200, status: "inactive" },
+...   { name: "Ian", age: 30, city: "Chicago", salary: 6100, status: "active" },
+...   { name: "Judy", age: 27, city: "Los Angeles", salary: 5800, status: "active" }
+... ])
+... 
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('69071c4418a959acd49dc2a5'),
+    '1': ObjectId('69071c4418a959acd49dc2a6'),
+    '2': ObjectId('69071c4418a959acd49dc2a7'),
+    '3': ObjectId('69071c4418a959acd49dc2a8'),
+    '4': ObjectId('69071c4418a959acd49dc2a9'),
+    '5': ObjectId('69071c4418a959acd49dc2aa'),
+    '6': ObjectId('69071c4418a959acd49dc2ab'),
+    '7': ObjectId('69071c4418a959acd49dc2ac'),
+    '8': ObjectId('69071c4418a959acd49dc2ad'),
+    '9': ObjectId('69071c4418a959acd49dc2ae')
+  }
+}
+mydb> db.users.find()
+[
+  {
+    _id: ObjectId('69071c4418a959acd49dc2a5'),
+    name: 'Alice',
+    age: 25,
+    city: 'New York',
+    salary: 5000,
+    status: 'active'
+  },
+  {
+    _id: ObjectId('69071c4418a959acd49dc2a6'),
+    name: 'Bob',
+    age: 32,
+    city: 'Los Angeles',
+    salary: 6000,
+    status: 'inactive'
+  },
+  {
+    _id: ObjectId('69071c4418a959acd49dc2a7'),
+    name: 'Charlie',
+    age: 29,
+    city: 'New York',
+    salary: 7000,
+    status: 'active'
+  },
+  {
+    _id: ObjectId('69071c4418a959acd49dc2a8'),
+    name: 'David',
+    age: 45,
+    city: 'Chicago',
+    salary: 8000,
+    status: 'active'
+  },
+  {
+    _id: ObjectId('69071c4418a959acd49dc2a9'),
+    name: 'Eve',
+    age: 22,
+    city: 'Chicago',
+    salary: 4500,
+    status: 'inactive'
+  },
+  {
+    _id: ObjectId('69071c4418a959acd49dc2aa'),
+    name: 'Frank',
+    age: 36,
+    city: 'New York',
+    salary: 9000,
+    status: 'active'
+  },
+  {
+    _id: ObjectId('69071c4418a959acd49dc2ab'),
+    name: 'Grace',
+    age: 28,
+    city: 'Los Angeles',
+    salary: 7500,
+    status: 'active'
+  },
+  {
+    _id: ObjectId('69071c4418a959acd49dc2ac'),
+    name: 'Hannah',
+    age: 40,
+    city: 'New York',
+    salary: 8200,
+    status: 'inactive'
+  },
+  {
+    _id: ObjectId('69071c4418a959acd49dc2ad'),
+    name: 'Ian',
+    age: 30,
+    city: 'Chicago',
+    salary: 6100,
+    status: 'active'
+  },
+  {
+    _id: ObjectId('69071c4418a959acd49dc2ae'),
+    name: 'Judy',
+    age: 27,
+    city: 'Los Angeles',
+    salary: 5800,
+    status: 'active'
+  }
+]
+mydb> db.users.find({}, {name: 1, age: 1, city: 1, _id: 0})
+[
+  { name: 'Alice', age: 25, city: 'New York' },
+  { name: 'Bob', age: 32, city: 'Los Angeles' },
+  { name: 'Charlie', age: 29, city: 'New York' },
+  { name: 'David', age: 45, city: 'Chicago' },
+  { name: 'Eve', age: 22, city: 'Chicago' },
+  { name: 'Frank', age: 36, city: 'New York' },
+  { name: 'Grace', age: 28, city: 'Los Angeles' },
+  { name: 'Hannah', age: 40, city: 'New York' },
+  { name: 'Ian', age: 30, city: 'Chicago' },
+  { name: 'Judy', age: 27, city: 'Los Angeles' }
+]
+mydb> db.users.aggregate([
+... { $group: { name: null, Dnyrajsalary: { $avg: 1 } } }
+... ])
+MongoServerError[Location40234]: The field 'name' must be an accumulator object
+mydb> db.users.aggregate([ { $group: { name: 1, Dnyrajsalary: { $avg: 1 } } }] )
+MongoServerError[Location40234]: The field 'name' must be an accumulator object
+mydb> db.users.aggregate([ { $group: { Dnyrajsalary: { $avg: 1 } } }] )
+MongoServerError[Location15955]: a group specification must include an _id
+mydb> db.users.aggregate([ { $group: { _id: null, Dnyrajsalary: { $avg: 1 } } }] )
+[ { _id: null, Dnyrajsalary: 1 } ]
+mydb> db.users.aggregate([
+...   { $group: { _id: null, avgSalary: { $avg: "$salary" } } }
+... ])
+... 
+[ { _id: null, avgSalary: 6710 } ]
+mydb> db.users.aggregate([
+...   { $group: { _id: "$city", totalUsers: { $sum: 1 } } }
+... ])
+... 
+[
+  { _id: 'Los Angeles', totalUsers: 3 },
+  { _id: 'New York', totalUsers: 4 },
+  { _id: 'Chicago', totalUsers: 3 }
+]
+mydb> db.users.aggregate([
+...   { $group: { _id: "$status", totalUsers: { $sum: 1 } } }
+... ])
+[
+  { _id: 'active', totalUsers: 7 },
+  { _id: 'inactive', totalUsers: 3 }
+]
+mydb> db.users.aggregate([ { $group: { _id: null, companySalaryCost: { $sum: "$salary"  } } }] )
+[ { _id: null, companySalaryCost: 67100 } ]
+mydb> db.users.aggregate([ { $group: { _id: null, companySalaryCost: { $sum: { status: "}  } } }] 
+Uncaught:
+SyntaxError: Unterminated string constant. (1:81)
+
+> 1 | db.users.aggregate([ { $group: { _id: null, companySalaryCost: { $sum: { status: "}  } } }] 
+    |                                                                                  ^
+  2 |
+
+mydb> db.users.aggregate([ { $group: { _id: null, companySalaryCost: { $sum: { status: "active" }  } } }] 
+... )
+[ { _id: null, companySalaryCost: 0 } ]
+mydb> db.users.aggregate([ { $group: { _id: "$status", companySalaryCost: { $sum: 1  } } }] )
+\[
+  { _id: 'active', companySalaryCost: 7 },
+  { _id: 'inactive', companySalaryCost: 3 }
+]
+mydb> db.users.aggregate([ { $group: { _id: "$status", companySalaryCost: { $sum: "$salary"  } } }] )
+[
+  { _id: 'active', companySalaryCost: 48400 },
+  { _id: 'inactive', companySalaryCost: 18700 }
+]
+mydb> db.users.aggregate([
+...   { $sort: { salary: -1 } },
+...   { $limit: 3 },
+...   { $project: { _id: 0, name: 1, city: 1, salary: 1 } }
+... ])
+... 
+[
+  { name: 'Frank', city: 'New York', salary: 9000 },
+  { name: 'Hannah', city: 'New York', salary: 8200 },
+  { name: 'David', city: 'Chicago', salary: 8000 }
+]
+mydb> db.users.aggregate([
+...   { $sort: { salary: 1 } },
+...   { $limit: 3 },
+...   { $project: { _id: 0, name: 1, city: 1, salary: 1 } }
+... ])
+... 
+[
+  { name: 'Eve', city: 'Chicago', salary: 4500 },
+  { name: 'Alice', city: 'New York', salary: 5000 },
+  { name: 'Judy', city: 'Los Angeles', salary: 5800 }
+]
+mydb> 
+(To exit, press Ctrl+C again or Ctrl+D or type .exit)
+mydb> 
+@OmkarSonawane1230 ➜ /workspaces/Functional-2025 (main) $ 

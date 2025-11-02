@@ -9,13 +9,13 @@ public class MongoDBNavigation {
 
     public static void main(String[] args) {
         // Connect to MongoDB (local Docker container or server)
-        MongoClient mongoClient = MongoClients.create("mongodb://root:example@localhost:27017");
+        MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
 
         // Use database "mydb"
         MongoDatabase database = mongoClient.getDatabase("mydb");
 
         // Use collection "customers"
-        MongoCollection<Document> collection = database.getCollection("customers");
+        MongoCollection<Document> collection = database.getCollection("users");
 
         Scanner sc = new Scanner(System.in);
         int choice;
