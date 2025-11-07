@@ -3,6 +3,10 @@ MongoDBNavigation.py
 
 Requirements:
 	pip install pymongo
+
+To see the port number of your MongoDB server, you can run the following command:
+	db.getMongo();
+	// This will display the MongoDB server information, including the port number.
 """
 
 from pymongo import MongoClient, errors
