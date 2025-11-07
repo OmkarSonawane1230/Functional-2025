@@ -1,0 +1,20 @@
+{
+  "name": "MongoDB Dev Codespace",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+
+  // Automatically run setup after Codespace creation
+  "postCreateCommand": "bash .devcontainer/postCreateCommand.sh",
+
+  // Optional: open MongoDB port for access from extensions or web apps
+  "forwardPorts": [27017],
+
+  // Recommended VS Code extensions
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "mongodb.mongodb-vscode",
+        "ms-azuretools.vscode-docker"
+      ]
+    }
+  }
+}
