@@ -3,6 +3,10 @@ MySQL_DBNavigation.py
 
 Requirements:
 	pip install mysql-connector-python
+
+To see the port number of your MySQL server, you can run the following SQL command:
+    SHOW VARIABLES LIKE 'port';
+
 """
 
 import mysql.connector
