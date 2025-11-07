@@ -22,3 +22,9 @@ sudo apt-get install -y mongodb-mongosh
 
 echo "✅ mongosh installed successfully!"
 mongosh --version
+
+sudo apt-get install -y mongodb-org
+sudo mkdir -p /data/db
+sudo chown -R "$(whoami)" /data/db
+mongod --dbpath /data/db --bind_ip 127.0.0.1 --fork --logpath /tmp/mongod.log
+
