@@ -1,1 +1,28 @@
 node_modules
+*.class
+**/*.class
+*.exe
+**/*.exe
+
+# Common C/C++/build artifacts
+*.o
+*.out
+a.out
+*.elf
+*.so
+*.a
+
+# Build / output directories
+/bin/
+/build/
+/dist/
+/obj/
+/target/
+
+# IDE / OS files
+.vscode/
+.DS_Store
+
+# Misc
+*.log
+*~
